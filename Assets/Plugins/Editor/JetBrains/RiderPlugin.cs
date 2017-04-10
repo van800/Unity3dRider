@@ -31,6 +31,12 @@ namespace Plugins.Editor.JetBrains
       set { EditorPrefs.SetBool("Rider_TargetFrameworkVersion45", value); }
     }
 
+    public static bool AddJsonToCsproj
+    {
+      get { return EditorPrefs.GetBool("Rider_AddJsonToCsproj", true); }
+      set { EditorPrefs.SetBool("Rider_AddJsonToCsproj", value); }
+    }
+
     internal static bool Enabled
     {
       get
@@ -314,6 +320,12 @@ All those problems will go away after Unity upgrades to mono4.";
         EditorGUILayout.Toggle(
           new GUIContent("TargetFrameworkVersion 4.5",
             help), TargetFrameworkVersion45);
+
+      AddJsonToCsproj =
+        EditorGUILayout.Toggle(
+          new GUIContent("Include json files in solution",
+            help), AddJsonToCsproj);
+
       EditorGUILayout.HelpBox(help, MessageType.None);
 
       EditorGUI.EndChangeCheck();

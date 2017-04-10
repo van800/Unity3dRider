@@ -78,6 +78,7 @@ namespace Plugins.Editor.JetBrains
 
       FixTargetFrameworkVersion(projectContentElement, xmlns);
       SetLangVersion(projectContentElement, xmlns);
+      AddJsonFiles(projectContentElement, xmlns);
       SetUnityData(projectContentElement, xmlns);
       SetManuallyDefinedComilingSettings(projectFile, projectContentElement, xmlns);
 
@@ -85,6 +86,21 @@ namespace Plugins.Editor.JetBrains
       SetXCodeDllReference("UnityEditor.iOS.Extensions.Common.dll", xmlns, projectContentElement);
 
       doc.Save(projectFile);
+    }
+
+    private static void AddJsonFiles(XElement projectContentElement, XNamespace xmlns)
+    {
+      if (RiderPlugin.AddJsonToCsproj)
+      {
+//        <ItemGroup>
+//          <Content Include="**\*.json" />
+//          </ItemGroup>
+        var itemGroup = new XElement(xmlns + "ItemGroup");
+        var content = new XElement(xmlns + "Content");
+        content.Add(new XAttribute("Include", @"**\*.json"));
+        itemGroup.Add(content);
+        projectContentElement.Add(itemGroup);
+      }
     }
 
     private static void SetUnityData(XElement projectElement, XNamespace xmlns)
