@@ -96,73 +96,42 @@ namespace Plugins.Editor.JetBrains
         {
             if (RiderPlugin.AddJsonToCsproj)
             {
-                AddJsonFiles(projectContentElement, xmlns);
+                AddFileExtension(projectContentElement, xmlns, "json");
             }
 
             if (RiderPlugin.AddImagesToCsproj)
             {
-                AddImageFiles(projectContentElement, xmlns);
+                string[] extensions = {"psd", "png", "jpg", "gif", "jpeg"};
+                AddFileExtensions(projectContentElement, xmlns, extensions);
             }
 
             if (RiderPlugin.AddAudioToCSproj)
             {
-                AddAudioFiles(projectContentElement, xmlns);
+                string[] extensions = {"mp3", "wav", "ogg", "aiff", "aif", "mod", "it", "s3m", "xm"};
+                AddFileExtensions(projectContentElement, xmlns, extensions);
             }
 
             if (RiderPlugin.Add3DAssetsToCSproj)
             {
-                Add3DAssetFiles(projectContentElement, xmlns);
+                string[] extensions = {"fbx", "max", "blend", "mb", "ma"};
+                AddFileExtensions(projectContentElement, xmlns, extensions);
             }
         }
 
-        private static void AddJsonFiles(XElement projectContentElement, XNamespace xmlns)
+        private static void AddFileExtension(XElement projectContentElement, XNamespace xmlns, string extension)
         {
             var itemGroup = new XElement(xmlns + "ItemGroup");
             var content = new XElement(xmlns + "Content");
-            content.Add(new XAttribute("Include", @"**\*.json"));
+            content.Add(new XAttribute("Include", @"**\*." + extension));
             itemGroup.Add(content);
             projectContentElement.Add(itemGroup);
         }
 
-        private static void AddImageFiles(XElement projectContentElement, XNamespace xmlns)
+        private static void AddFileExtensions(XElement projectContentElement, XNamespace xmlns, string[] extensions)
         {
-            string[] extensions = {"psd", "png", "jpg", "gif", "jpeg"};
-
             foreach (var extension in extensions)
             {
-                var itemGroup = new XElement(xmlns + "ItemGroup");
-                var content = new XElement(xmlns + "Content");
-                content.Add(new XAttribute("Include", @"**\*." + extension));
-                itemGroup.Add(content);
-                projectContentElement.Add(itemGroup);
-            }
-        }
-
-        private static void AddAudioFiles(XElement projectContentElement, XNamespace xmlns)
-        {
-            string[] extensions = {"mp3", "wav", "ogg", "aiff", "aif", "mod", "it", "s3m", "xm"};
-
-            foreach (var extension in extensions)
-            {
-                var itemGroup = new XElement(xmlns + "ItemGroup");
-                var content = new XElement(xmlns + "Content");
-                content.Add(new XAttribute("Include", @"**\*." + extension));
-                itemGroup.Add(content);
-                projectContentElement.Add(itemGroup);
-            }
-        }
-
-        private static void Add3DAssetFiles(XElement projectContentElement, XNamespace xmlns)
-        {
-            string[] extensions = {"fbx", "max", "blend", "mb", "ma"};
-
-            foreach (var extention in extensions)
-            {
-                var itemGroup = new XElement(xmlns + "ItemGroup");
-                var content = new XElement(xmlns + "Content");
-                content.Add(new XAttribute("Include", @"**\*." + extention));
-                itemGroup.Add(content);
-                projectContentElement.Add(itemGroup);
+                AddFileExtension(projectContentElement, xmlns, extension);
             }
         }
 
