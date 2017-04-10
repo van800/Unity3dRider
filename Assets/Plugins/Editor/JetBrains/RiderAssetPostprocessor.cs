@@ -80,6 +80,8 @@ namespace Plugins.Editor.JetBrains
 
             FixTargetFrameworkVersion(projectContentElement, xmlns);
             SetLangVersion(projectContentElement, xmlns);
+
+            AddContentFiles(projectContentElement, xmlns);
             SetUnityData(projectContentElement, xmlns);
             SetManuallyDefinedComilingSettings(projectFile, projectContentElement, xmlns);
 
@@ -89,9 +91,84 @@ namespace Plugins.Editor.JetBrains
             doc.Save(projectFile);
         }
 
+
+        private static void AddContentFiles(XElement projectContentElement, XNamespace xmlns)
+        {
+            if (RiderPlugin.AddJsonToCsproj)
+            {
+                AddJsonFiles(projectContentElement, xmlns);
+            }
+
+            if (RiderPlugin.AddImagesToCsproj)
+            {
+                AddImageFiles(projectContentElement, xmlns);
+            }
+
+            if (RiderPlugin.AddAudioToCSproj)
+            {
+                AddAudioFiles(projectContentElement, xmlns);
+            }
+
+            if (RiderPlugin.Add3DAssetsToCSproj)
+            {
+                Add3DAssetFiles(projectContentElement, xmlns);
+            }
+        }
+
+        private static void AddJsonFiles(XElement projectContentElement, XNamespace xmlns)
+        {
+            var itemGroup = new XElement(xmlns + "ItemGroup");
+            var content = new XElement(xmlns + "Content");
+            content.Add(new XAttribute("Include", @"**\*.json"));
+            itemGroup.Add(content);
+            projectContentElement.Add(itemGroup);
+        }
+
+        private static void AddImageFiles(XElement projectContentElement, XNamespace xmlns)
+        {
+            string[] extensions = {"psd", "png", "jpg", "gif", "jpeg"};
+
+            foreach (var extension in extensions)
+            {
+                var itemGroup = new XElement(xmlns + "ItemGroup");
+                var content = new XElement(xmlns + "Content");
+                content.Add(new XAttribute("Include", @"**\*." + extension));
+                itemGroup.Add(content);
+                projectContentElement.Add(itemGroup);
+            }
+        }
+
+        private static void AddAudioFiles(XElement projectContentElement, XNamespace xmlns)
+        {
+            string[] extensions = {"mp3", "wav", "ogg", "aiff", "aif", "mod", "it", "s3m", "xm"};
+
+            foreach (var extension in extensions)
+            {
+                var itemGroup = new XElement(xmlns + "ItemGroup");
+                var content = new XElement(xmlns + "Content");
+                content.Add(new XAttribute("Include", @"**\*." + extension));
+                itemGroup.Add(content);
+                projectContentElement.Add(itemGroup);
+            }
+        }
+
+        private static void Add3DAssetFiles(XElement projectContentElement, XNamespace xmlns)
+        {
+            string[] extensions = {"fbx", "max", "blend", "mb", "ma"};
+
+            foreach (var extention in extensions)
+            {
+                var itemGroup = new XElement(xmlns + "ItemGroup");
+                var content = new XElement(xmlns + "Content");
+                content.Add(new XAttribute("Include", @"**\*." + extention));
+                itemGroup.Add(content);
+                projectContentElement.Add(itemGroup);
+            }
+        }
+
         private static void SetUnityData(XElement projectElement, XNamespace xmlns)
         {
-            // will be used by dependent Rider to provide Denug Configuration and other features
+            // will be used by dependent Rider to provide Debug Configuration and other features
             projectElement.AddFirst(new XElement(xmlns + "PropertyGroup",
                 new XElement(xmlns + "unityProcessId", unityProcessId.ToString())));
             projectElement.AddFirst(new XElement(xmlns + "PropertyGroup",

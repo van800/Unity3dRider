@@ -31,6 +31,31 @@ namespace Plugins.Editor.JetBrains
             set { EditorPrefs.SetBool("Rider_TargetFrameworkVersion45", value); }
         }
 
+
+        public static bool AddImagesToCsproj
+        {
+            get { return EditorPrefs.GetBool("Rider_AddImagesToCsproj", true); }
+            set { EditorPrefs.SetBool("Rider_AddImagesToCsproj", value); }
+        }
+
+        public static bool AddJsonToCsproj
+        {
+            get { return EditorPrefs.GetBool("Rider_AddJsonToCsproj", true); }
+            set { EditorPrefs.SetBool("Rider_AddJsonToCsproj", value); }
+        }
+
+        public static bool AddAudioToCSproj
+        {
+            get { return EditorPrefs.GetBool("Rider_AddAudioToCSproj", true); }
+            set { EditorPrefs.SetBool("Rider_AddAudioToCSproj", value); }
+        }
+
+        public static bool Add3DAssetsToCSproj
+        {
+            get { return EditorPrefs.GetBool("Rider_Add3DAssetsToCSproj", true); }
+            set { EditorPrefs.SetBool("Rider_Add3DAssetsToCSproj", value); }
+        }
+
         internal static bool Enabled
         {
             get { return !string.IsNullOrEmpty(DefaultApp) && DefaultApp.ToLower().Contains("rider"); }
@@ -315,6 +340,28 @@ All those problems will go away after Unity upgrades to mono4.";
                 EditorGUILayout.Toggle(
                     new GUIContent("TargetFrameworkVersion 4.5",
                         help), TargetFrameworkVersion45);
+
+
+            AddImagesToCsproj =
+                EditorGUILayout.Toggle(
+                    new GUIContent("Include image files in solution",
+                        help), AddImagesToCsproj);
+
+            AddJsonToCsproj =
+                EditorGUILayout.Toggle(
+                    new GUIContent("Include json files in solution",
+                        help), AddJsonToCsproj);
+
+            AddAudioToCSproj =
+                EditorGUILayout.Toggle(
+                    new GUIContent("Include audio files in solution",
+                        help), AddAudioToCSproj);
+
+            Add3DAssetsToCSproj =
+                EditorGUILayout.Toggle(
+                    new GUIContent("Include 3d asset files in solution",
+                        help), Add3DAssetsToCSproj);
+
             EditorGUILayout.HelpBox(help, MessageType.None);
 
             EditorGUI.EndChangeCheck();
