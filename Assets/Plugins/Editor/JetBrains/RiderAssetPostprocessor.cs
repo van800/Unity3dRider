@@ -96,7 +96,8 @@ namespace Plugins.Editor.JetBrains
         {
             if (RiderPlugin.AddJsonToCsproj)
             {
-                AddFileExtension(projectContentElement, xmlns, "json");
+                string[] extensions = {"json"};
+                AddFileExtensions(projectContentElement, xmlns, extensions);
             }
 
             if (RiderPlugin.AddImagesToCsproj)
@@ -118,20 +119,15 @@ namespace Plugins.Editor.JetBrains
             }
         }
 
-        private static void AddFileExtension(XElement projectContentElement, XNamespace xmlns, string extension)
-        {
-            var itemGroup = new XElement(xmlns + "ItemGroup");
-            var content = new XElement(xmlns + "Content");
-            content.Add(new XAttribute("Include", @"**\*." + extension));
-            itemGroup.Add(content);
-            projectContentElement.Add(itemGroup);
-        }
-
         private static void AddFileExtensions(XElement projectContentElement, XNamespace xmlns, string[] extensions)
         {
             foreach (var extension in extensions)
             {
-                AddFileExtension(projectContentElement, xmlns, extension);
+                var itemGroup = new XElement(xmlns + "ItemGroup");
+                var content = new XElement(xmlns + "Content");
+                content.Add(new XAttribute("Include", @"**\*." + extension));
+                itemGroup.Add(content);
+                projectContentElement.Add(itemGroup);
             }
         }
 
