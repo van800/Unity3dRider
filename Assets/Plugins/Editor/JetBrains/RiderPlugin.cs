@@ -70,11 +70,14 @@ namespace Plugins.Editor.JetBrains
     {
       // at least on windows new version of Rider gets always installed to new location - so try to search that new location
       var riderFileInfo = new FileInfo(riderPath);
-      var newPath = riderFileInfo.FullName+".non-existing extension";
+      var macOSVersion = riderFileInfo.Extension == ".app";
+      var riderExists = macOSVersion ? new DirectoryInfo(DefaultApp).Exists : riderFileInfo.Exists;
 
-      if (riderFileInfo.Exists) 
+      if (riderExists)
         return true;
       
+      var newPath = riderFileInfo.FullName+".non-existing extension";
+
       switch (riderFileInfo.Extension)
       {
         case ".exe":
